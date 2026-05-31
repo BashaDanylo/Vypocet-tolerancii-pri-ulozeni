@@ -101,14 +101,23 @@ if not disabled:
 else:
     min_val, max_val = 0, 0
 
-nominal = st.sidebar.number_input(
-    "Menovitý rozmer (mm)",
-    min_value=float(min_val),
-    max_value=float(max_val),
-    step=1.0,
-    format="%.2f",
-    disabled=disabled
-)
+incorrect_tolerances = False
+
+try:
+    nominal = st.sidebar.number_input(
+        "Menovitý rozmer (mm)",
+        min_value=float(min_val),
+        max_value=float(max_val),
+        step=1.0,
+        format="%.2f",
+        disabled=disabled
+    )
+except Exception:
+    st.sidebar.error("Vybrané tolerancie nemajú spoločný rozsah povolených priemerov")
+    nominal = 0
+    incorrect_tolerances = True
+
+st.sidebar.caption(f"Povolený rozsah: **{min_val} – {max_val} mm**")
 st.sidebar.caption(f"Povolený rozsah: **{min_val} – {max_val} mm**")
 
 if not disabled and nominal > 0:
